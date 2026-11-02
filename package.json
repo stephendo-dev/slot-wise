@@ -8,11 +8,12 @@
     "node": ">=24 <25"
   },
   "scripts": {
-    "dev": "pnpm --filter @slotwise/shared build && pnpm --parallel --filter web --filter api dev",
+    "shared:build": "pnpm --filter @slotwise/shared build",
+    "dev": "pnpm shared:build && pnpm --parallel -r dev",
     "build": "pnpm -r build",
-    "lint": "pnpm -r lint",
-    "typecheck": "pnpm --filter @slotwise/shared build && pnpm -r typecheck",
-    "test": "pnpm --filter @slotwise/shared build && pnpm -r test",
+    "lint": "pnpm shared:build && pnpm -r lint",
+    "typecheck": "pnpm shared:build && pnpm -r typecheck",
+    "test": "pnpm shared:build && pnpm -r test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lighthouse": "lhci autorun"
