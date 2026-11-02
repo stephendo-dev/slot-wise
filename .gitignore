@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.next/
+out/
+coverage/
+.lighthouseci/
+*.tsbuildinfo
+
+.env
+.env*.local
+
+.DS_Store
+*.log
