@@ -9,6 +9,8 @@ allowBuilds:
   unrs-resolver: false
   '@nestjs/core': false
 
+# pnpm waits one day before installing a new release. next@16.4.4 (published 2026-11-02 10:40 UTC)
+# is exempt until that day has passed: delete this block after 2026-11-03 and run `pnpm install`.
 minimumReleaseAgeExclude:
   - '@next/env@16.4.4'
   - '@next/eslint-plugin-next@16.4.4'
@@ -22,3 +24,10 @@ minimumReleaseAgeExclude:
   - '@next/swc-win32-x64-msvc@16.4.4'
   - eslint-config-next@16.4.4
   - next@16.4.4
+
+# Fixed versions for build-time dependencies of @lhci/cli and @nestjs/cli (see SECURITY.md).
+overrides:
+  tmp: '>=0.2.6'
+  basic-ftp: '>=6.2.1'
+  uuid: '>=11.1.1'
+  minimatch@<11: '>=11.0.1'
