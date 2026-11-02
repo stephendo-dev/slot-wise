@@ -91,9 +91,9 @@ export function Hero() {
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <button
           type="button"
-          disabled
+          aria-disabled="true"
           aria-describedby="demo-soon"
-          className="rounded-md bg-indigo-700 px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+          className="cursor-not-allowed rounded-md bg-indigo-700 px-5 py-3 text-sm font-semibold text-white opacity-70"
         >
           Try as business owner
         </button>

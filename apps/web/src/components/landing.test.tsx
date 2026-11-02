@@ -17,10 +17,11 @@ describe('Landing', () => {
     }
   });
 
-  it('keeps the demo button disabled until the demo salon exists', () => {
+  it('keeps the demo button inactive but focusable until the demo salon exists', () => {
     expect(html).toMatch(
-      /<button[^>]*disabled[^>]*>Try as business owner<\/button>/,
+      /<button[^>]*aria-disabled="true"[^>]*aria-describedby="demo-soon"[^>]*>Try as business owner<\/button>/,
     );
+    expect(html).not.toMatch(/<button[^>]*\sdisabled[\s=>]/);
   });
 
   it('links the source code', () => {
