@@ -1,0 +1,24 @@
+{
+  "name": "slot-wise",
+  "private": true,
+  "description": "SlotWise: online booking for small service businesses. Next.js, NestJS, PostgreSQL, Google Cloud Run.",
+  "type": "module",
+  "packageManager": "pnpm@12.11.2",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @slotwise/shared build && pnpm --parallel --filter web --filter api dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm --filter @slotwise/shared build && pnpm -r typecheck",
+    "test": "pnpm --filter @slotwise/shared build && pnpm -r test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lighthouse": "lhci autorun"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.15.1",
+    "prettier": "^3.9.10"
+  }
+}
