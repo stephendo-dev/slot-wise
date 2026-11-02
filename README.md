@@ -22,6 +22,25 @@ pnpm install
 pnpm dev          # web on http://localhost:3000, API on http://localhost:4000
 ```
 
+The API needs PostgreSQL. It runs on [Neon](https://neon.com): link the project with `neon init`, which writes `DATABASE_URL` and `DATABASE_URL_UNPOOLED` to `.env.local`, and work on a development branch (`neon checkout dev --create`), not `production`. Then apply the migrations:
+
+```bash
+pnpm db:migrate   # reads .env.local; DATABASE_URL_UNPOOLED, else DATABASE_URL
+```
+
+Change the schema in `apps/api/src/db/schema.ts`, then `pnpm --filter api db:generate` writes a SQL migration to `apps/api/drizzle/`.
+
+The API tests never touch Neon. They use a throwaway Postgres in Docker:
+
+```bash
+pnpm db:up        # Postgres on localhost:5432
+DATABASE_URL=postgres://slotwise:slotwise@localhost:5432/slotwise_test pnpm db:migrate
+pnpm test
+pnpm db:down
+```
+
+`GET /health` on the API returns the version and `database: up`, or `503` and `database: down`.
+
 Checks, as CI runs them:
 
 ```bash
