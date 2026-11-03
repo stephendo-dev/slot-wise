@@ -19,6 +19,22 @@ jobs:
     name: ci
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # A throwaway Postgres for the migrations and the API tests. The credentials
+    # match the default in apps/api/vitest.config.e2e.ts; nothing here is a secret.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: slotwise
+          POSTGRES_PASSWORD: slotwise
+          POSTGRES_DB: slotwise_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U slotwise -d slotwise_test"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -45,6 +61,11 @@ jobs:
 
       - name: Types
         run: pnpm typecheck
+
+      - name: Migrate the test database
+        run: pnpm db:migrate:test
+        env:
+          DATABASE_URL: postgres://slotwise:slotwise@localhost:5432/slotwise_test
 
       - name: Tests
         run: pnpm test

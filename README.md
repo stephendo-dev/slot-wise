@@ -22,6 +22,27 @@ pnpm install
 pnpm dev          # web on http://localhost:3000, API on http://localhost:4000
 ```
 
+The API needs PostgreSQL. It runs on [Neon](https://neon.com): link the project with `neon init`, which writes `DATABASE_URL` and `DATABASE_URL_UNPOOLED` to `.env.local`, and work on a development branch (`neon checkout dev --create`), not `production`. Then apply the migrations:
+
+```bash
+pnpm db:migrate   # reads .env.local; DATABASE_URL_UNPOOLED, else DATABASE_URL
+```
+
+Change the schema in `apps/api/src/db/schema.ts`, then `pnpm --filter api db:generate` writes a SQL migration to `apps/api/drizzle/`.
+
+The API tests never touch Neon. They use a throwaway Postgres in Docker:
+
+```bash
+pnpm db:up        # Postgres on localhost:5432
+pnpm db:migrate:test   # the test database only, never Neon
+pnpm test
+pnpm db:down
+```
+
+`GET /health` on the API returns the version and `database: up`, or `503` and `database: down`.
+
+Auth: `POST /auth/signup`, `/auth/login`, `/auth/logout` and `GET /auth/me`. A session is a random token in an httpOnly, Secure, SameSite=Lax cookie; the database keeps only its SHA-256. Passwords are hashed with argon2id. Failed logins are limited to 5 per client address and email in 15 minutes.
+
 Checks, as CI runs them:
 
 ```bash

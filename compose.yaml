@@ -1,0 +1,15 @@
+# Throwaway Postgres for local API tests and migrations: `pnpm db:up`.
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: slotwise
+      POSTGRES_PASSWORD: slotwise
+      POSTGRES_DB: slotwise_test
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U slotwise -d slotwise_test']
+      interval: 2s
+      timeout: 3s
+      retries: 20
