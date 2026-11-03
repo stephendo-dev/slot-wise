@@ -1,7 +1,12 @@
+import { sql } from 'drizzle-orm';
 import {
+  check,
   index,
+  integer,
   pgEnum,
   pgTable,
+  primaryKey,
+  smallint,
   text,
   timestamp,
   uuid,
@@ -48,4 +53,61 @@ export const sessions = pgTable(
       .defaultNow(),
   },
   (table) => [index('sessions_user_id_idx').on(table.userId)],
+);
+
+export const staff = pgTable('staff', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  businessId: uuid('business_id')
+    .notNull()
+    .references(() => businesses.id, { onDelete: 'cascade' }),
+  // The login of a staff member who signs in to see their own bookings.
+  userId: uuid('user_id')
+    .unique()
+    .references(() => users.id, { onDelete: 'set null' }),
+  name: text('name').notNull(),
+  archivedAt: timestamp('archived_at', { withTimezone: true }),
+});
+
+export const services = pgTable('services', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  businessId: uuid('business_id')
+    .notNull()
+    .references(() => businesses.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  durationMinutes: integer('duration_minutes').notNull(),
+  priceCents: integer('price_cents').notNull(),
+  archivedAt: timestamp('archived_at', { withTimezone: true }),
+});
+
+export const serviceStaff = pgTable(
+  'service_staff',
+  {
+    serviceId: uuid('service_id')
+      .notNull()
+      .references(() => services.id, { onDelete: 'cascade' }),
+    staffId: uuid('staff_id')
+      .notNull()
+      .references(() => staff.id, { onDelete: 'cascade' }),
+  },
+  (table) => [primaryKey({ columns: [table.serviceId, table.staffId] })],
+);
+
+export const workingHours = pgTable(
+  'working_hours',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    staffId: uuid('staff_id')
+      .notNull()
+      .references(() => staff.id, { onDelete: 'cascade' }),
+    weekday: smallint('weekday').notNull(),
+    startMinute: smallint('start_minute').notNull(),
+    endMinute: smallint('end_minute').notNull(),
+  },
+  (table) => [
+    index('working_hours_staff_idx').on(table.staffId),
+    check(
+      'working_hours_range',
+      sql`${table.startMinute} < ${table.endMinute}`,
+    ),
+  ],
 );

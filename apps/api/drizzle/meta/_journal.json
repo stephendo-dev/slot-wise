@@ -15,6 +15,13 @@
       "when": 1793717843979,
       "tag": "0001_famous_nightmare",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793719446633,
+      "tag": "0002_purple_frightful_four",
+      "breakpoints": true
     }
   ]
 }

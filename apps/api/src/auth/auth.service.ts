@@ -33,7 +33,7 @@ interface PgError {
   constraint?: string;
 }
 
-function uniqueViolation(error: unknown): string | undefined {
+export function uniqueViolation(error: unknown): string | undefined {
   const candidates = [error, (error as { cause?: unknown } | null)?.cause];
   for (const candidate of candidates) {
     const pg = candidate as PgError | null;
