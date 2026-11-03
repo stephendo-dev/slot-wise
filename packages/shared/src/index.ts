@@ -18,3 +18,5 @@ export function slugify(name: string): string {
     .slice(0, 48)
     .replace(/-+$/g, '');
 }
+
+export * from './auth.js';
