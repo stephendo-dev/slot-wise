@@ -9,6 +9,7 @@ allowBuilds:
   unrs-resolver: false
   '@nestjs/core': false
   esbuild: false
+  argon2: false
 
 # pnpm waits one day before installing a new release. next@16.4.4 (published 2026-11-02 10:40 UTC)
 # is exempt until that day has passed: delete this block after 2026-11-03 and run `pnpm install`.

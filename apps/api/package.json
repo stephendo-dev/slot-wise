@@ -15,17 +15,20 @@
     "test": "vitest run && vitest run --config ./vitest.config.e2e.ts",
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "node --env-file-if-exists=../../.env.local src/db/migrate.ts"
+    "db:migrate": "node --env-file-if-exists=../../.env.local src/db/migrate.ts",
+    "db:migrate:test": "DATABASE_URL_UNPOOLED= DATABASE_URL=${TEST_DATABASE_URL:-postgres://slotwise:slotwise@localhost:5432/slotwise_test} node src/db/migrate.ts"
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",
     "@nestjs/core": "^12.0.1",
     "@nestjs/platform-express": "^12.0.1",
     "@slotwise/shared": "workspace:*",
+    "argon2": "^0.45.1",
     "drizzle-orm": "^0.45.4",
     "pg": "^8.23.1",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@nestjs/cli": "^12.0.0",
