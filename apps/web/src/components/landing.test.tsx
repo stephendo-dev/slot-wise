@@ -24,6 +24,11 @@ describe('Landing', () => {
     expect(html).not.toMatch(/<button[^>]*\sdisabled[\s=>]/);
   });
 
+  it('links to sign-up and login', () => {
+    expect(html).toMatch(/<a[^>]*href="\/signup"[^>]*>Get started<\/a>/);
+    expect(html).toMatch(/<a[^>]*href="\/login"[^>]*>Sign in<\/a>/);
+  });
+
   it('links the source code', () => {
     expect(html).toContain('https://github.com/stephendo-dev/slot-wise');
   });
