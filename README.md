@@ -34,12 +34,14 @@ The API tests never touch Neon. They use a throwaway Postgres in Docker:
 
 ```bash
 pnpm db:up        # Postgres on localhost:5432
-DATABASE_URL=postgres://slotwise:slotwise@localhost:5432/slotwise_test pnpm db:migrate
+pnpm db:migrate:test   # the test database only, never Neon
 pnpm test
 pnpm db:down
 ```
 
 `GET /health` on the API returns the version and `database: up`, or `503` and `database: down`.
+
+Auth: `POST /auth/signup`, `/auth/login`, `/auth/logout` and `GET /auth/me`. A session is a random token in an httpOnly, Secure, SameSite=Lax cookie; the database keeps only its SHA-256. Passwords are hashed with argon2id. Failed logins are limited to 5 per client address and email in 15 minutes.
 
 Checks, as CI runs them:
 

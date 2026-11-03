@@ -19,7 +19,8 @@
     "lighthouse": "lhci autorun",
     "db:up": "docker compose up -d --wait",
     "db:down": "docker compose down",
-    "db:migrate": "pnpm --filter api db:migrate"
+    "db:migrate": "pnpm --filter api db:migrate",
+    "db:migrate:test": "pnpm --filter api db:migrate:test"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",

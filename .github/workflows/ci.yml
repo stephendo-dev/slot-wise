@@ -63,7 +63,7 @@ jobs:
         run: pnpm typecheck
 
       - name: Migrate the test database
-        run: pnpm db:migrate
+        run: pnpm db:migrate:test
         env:
           DATABASE_URL: postgres://slotwise:slotwise@localhost:5432/slotwise_test
 
