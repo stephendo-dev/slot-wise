@@ -22,6 +22,9 @@ export function DashboardNav({
         <Link href="/dashboard" className={linkClass}>
           Overview
         </Link>
+        <Link href="/dashboard/bookings" className={linkClass}>
+          Bookings
+        </Link>
         {role === 'owner' ? (
           <>
             <Link href="/dashboard/staff" className={linkClass}>
