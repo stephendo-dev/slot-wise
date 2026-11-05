@@ -1,4 +1,5 @@
 import { APP_NAME, SOURCE_URL } from '@slotwise/shared';
+import { DemoButton } from './demo-button';
 
 export const steps = [
   {
@@ -102,14 +103,7 @@ export function Hero() {
         in under a minute.
       </p>
       <div className="mt-10 flex flex-wrap items-center gap-4">
-        <button
-          type="button"
-          aria-disabled="true"
-          aria-describedby="demo-soon"
-          className="cursor-not-allowed rounded-md bg-indigo-700 px-5 py-3 text-sm font-semibold text-white opacity-70"
-        >
-          Try as business owner
-        </button>
+        <DemoButton />
         <a
           href={SOURCE_URL}
           className="rounded-md px-5 py-3 text-sm font-semibold text-slate-900 ring-1 ring-slate-300 hover:bg-slate-50"
@@ -117,9 +111,6 @@ export function Hero() {
           View the source
         </a>
       </div>
-      <p id="demo-soon" className="mt-3 text-sm text-slate-600">
-        The live demo salon opens soon.
-      </p>
     </section>
   );
 }

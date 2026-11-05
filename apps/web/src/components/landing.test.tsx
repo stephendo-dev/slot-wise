@@ -1,5 +1,8 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }));
+
 import { Landing, features, steps } from './landing';
 
 describe('Landing', () => {
@@ -17,11 +20,9 @@ describe('Landing', () => {
     }
   });
 
-  it('keeps the demo button inactive but focusable until the demo salon exists', () => {
-    expect(html).toMatch(
-      /<button[^>]*aria-disabled="true"[^>]*aria-describedby="demo-soon"[^>]*>Try as business owner<\/button>/,
-    );
-    expect(html).not.toMatch(/<button[^>]*\sdisabled[\s=>]/);
+  it('has a working demo button', () => {
+    expect(html).toMatch(/<button[^>]*>Try as business owner<\/button>/);
+    expect(html).not.toMatch(/aria-disabled/);
   });
 
   it('links to sign-up and login', () => {
