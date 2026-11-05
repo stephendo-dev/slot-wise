@@ -49,6 +49,8 @@ export interface SessionUser {
   id: string;
   email: string;
   role: Role;
+  /** The shared demo owner: it cannot change its password or email or delete the business. */
+  isDemo: boolean;
 }
 
 export interface SessionBusiness {
@@ -62,3 +64,20 @@ export interface SessionInfo {
   user: SessionUser;
   business: SessionBusiness;
 }
+
+export const passwordChangeSchema = z.object({
+  currentPassword: z.string().min(1).max(128),
+  newPassword: z.string().min(10, 'Use at least 10 characters').max(128),
+});
+export type PasswordChangeInput = z.infer<typeof passwordChangeSchema>;
+
+export const emailChangeSchema = z.object({
+  email,
+  password: z.string().min(1).max(128),
+});
+export type EmailChangeInput = z.infer<typeof emailChangeSchema>;
+
+export const deleteBusinessSchema = z.object({
+  password: z.string().min(1).max(128),
+});
+export type DeleteBusinessInput = z.infer<typeof deleteBusinessSchema>;

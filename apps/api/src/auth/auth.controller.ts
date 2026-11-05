@@ -21,8 +21,8 @@ import { AuthService } from './auth.service.js';
 import type { AuthedRequest } from './auth-request.js';
 import {
   SESSION_COOKIE,
-  sessionCookieMaxAgeSeconds,
   sessionCookieOptions,
+  setSessionCookie,
 } from './session-cookie.js';
 import { SessionGuard } from './session.guard.js';
 import { ZodPipe } from './zod.pipe.js';
@@ -78,9 +78,6 @@ export class AuthController {
   }
 
   private setSession(res: unknown, token: string): void {
-    this.adapterHost.httpAdapter.setCookie(res, SESSION_COOKIE, token, {
-      ...sessionCookieOptions,
-      maxAge: sessionCookieMaxAgeSeconds,
-    });
+    setSessionCookie(this.adapterHost.httpAdapter, res, token);
   }
 }

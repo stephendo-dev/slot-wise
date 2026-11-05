@@ -132,6 +132,20 @@ export class AuthService {
     return { token, info: this.toInfo(row.user, row.business) };
   }
 
+  /** Starts a session for a user without a password: the one-click demo. */
+  async startSessionFor(
+    userId: string,
+  ): Promise<{ token: string; info: SessionInfo }> {
+    const [row] = await this.database.db
+      .select({ user: users, business: businesses })
+      .from(users)
+      .innerJoin(businesses, eq(users.businessId, businesses.id))
+      .where(eq(users.id, userId));
+    if (!row) throw new UnauthorizedException();
+    const token = await this.createSession(row.user.id);
+    return { token, info: this.toInfo(row.user, row.business) };
+  }
+
   async logout(token: string): Promise<void> {
     await this.database.db
       .delete(sessions)
@@ -171,7 +185,12 @@ export class AuthService {
     business: typeof businesses.$inferSelect,
   ): SessionInfo {
     return {
-      user: { id: user.id, email: user.email, role: user.role },
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        isDemo: user.isDemo,
+      },
       business: {
         id: business.id,
         slug: business.slug,
