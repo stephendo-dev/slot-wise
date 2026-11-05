@@ -20,6 +20,22 @@ import { BookingsAdminService } from './bookings-admin.service.js';
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
+/** A real calendar day written as YYYY-MM-DD: 2026-02-31 is not one, although Date.parse accepts it. */
+function isCalendarDate(value: string): boolean {
+  if (!DATE.test(value)) return false;
+  const [year, month, day] = value.split('-').map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+}
+
 // Order matters: SessionGuard sets the session that RolesGuard reads.
 @Controller('bookings')
 @UseGuards(SessionGuard, RolesGuard)
@@ -33,7 +49,7 @@ export class BookingsController {
     @Query('date') date?: string,
   ): Promise<DayBookings> {
     const chosen = date ?? localDay(Date.now(), req.auth.business.timeZone);
-    if (!DATE.test(chosen) || Number.isNaN(Date.parse(`${chosen}T00:00:00Z`))) {
+    if (!isCalendarDate(chosen)) {
       throw new BadRequestException('Use a date like 2026-11-02');
     }
     return this.admin.day(req.auth, chosen);
