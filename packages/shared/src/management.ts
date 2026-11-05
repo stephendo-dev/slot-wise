@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { registrableEmail } from './auth.js';
 
 export const WEEKDAYS = [
   'Monday',
@@ -27,7 +28,7 @@ const name = z.string().trim().min(1, 'Enter a name').max(80);
 export const staffCreateSchema = z
   .object({
     name,
-    email: z.string().trim().toLowerCase().pipe(z.email()).optional(),
+    email: registrableEmail.optional(),
     password: z
       .string()
       .min(10, 'Use at least 10 characters')

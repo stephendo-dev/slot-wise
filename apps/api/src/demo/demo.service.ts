@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import argon2 from 'argon2';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { createHash, randomBytes } from 'node:crypto';
 import { AuthService } from '../auth/auth.service.js';
 import { DatabaseService } from '../db/database.service.js';
@@ -48,6 +48,10 @@ export class DemoService {
     const plan = buildSeedBookings(now);
 
     await this.database.db.transaction(async (tx) => {
+      // Logins a visitor made in the demo salon do not survive a reset.
+      await tx
+        .delete(users)
+        .where(and(eq(users.businessId, businessId), eq(users.isDemo, false)));
       await tx.delete(bookings).where(eq(bookings.businessId, businessId));
       await tx.delete(staff).where(eq(staff.businessId, businessId)); // hours and links go with it
       await tx.delete(services).where(eq(services.businessId, businessId));
@@ -104,7 +108,7 @@ export class DemoService {
     const [found] = await db
       .select({ userId: users.id, businessId: users.businessId })
       .from(users)
-      .where(eq(users.email, DEMO_EMAIL));
+      .where(and(eq(users.email, DEMO_EMAIL), eq(users.isDemo, true)));
     if (found) return found;
 
     // The demo owner has no usable password: it can only be entered through the demo button.

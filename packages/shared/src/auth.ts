@@ -18,8 +18,17 @@ const email = z
   .toLowerCase()
   .pipe(z.email('Enter a valid email address'));
 
+/** The shared demo owner's address. Nobody else can register it. */
+export const DEMO_EMAIL = 'demo@slotwise.dev';
+
+/** An email that a person may register: valid, and not the demo owner's. */
+export const registrableEmail = email.refine(
+  (value) => value !== DEMO_EMAIL,
+  'This email address is reserved',
+);
+
 export const signupSchema = z.object({
-  email,
+  email: registrableEmail,
   password: z
     .string()
     .min(10, 'Use at least 10 characters')
@@ -72,7 +81,7 @@ export const passwordChangeSchema = z.object({
 export type PasswordChangeInput = z.infer<typeof passwordChangeSchema>;
 
 export const emailChangeSchema = z.object({
-  email,
+  email: registrableEmail,
   password: z.string().min(1).max(128),
 });
 export type EmailChangeInput = z.infer<typeof emailChangeSchema>;

@@ -1,7 +1,9 @@
+import { DEMO_EMAIL } from '@slotwise/shared';
 import { computeSlots, type Busy } from '../slots/slots.js';
 
+export { DEMO_EMAIL };
+
 export const DEMO_SLUG = 'luna-hair-studio';
-export const DEMO_EMAIL = 'demo@slotwise.dev';
 export const DEMO_BUSINESS = 'Luna Hair Studio';
 export const DEMO_TIME_ZONE = 'Asia/Ho_Chi_Minh';
 

@@ -1,5 +1,6 @@
 import {
   Body,
+  ForbiddenException,
   Controller,
   Get,
   HttpCode,
@@ -53,6 +54,9 @@ export class ManagementController {
     @Req() req: AuthedRequest,
     @Body(new ZodPipe(staffCreateSchema)) input: StaffCreateInput,
   ): Promise<StaffView> {
+    if (req.auth.user.isDemo && input.email) {
+      throw new ForbiddenException('The demo salon cannot create staff logins');
+    }
     return this.staff.create(req.auth.business.id, input);
   }
 

@@ -247,6 +247,80 @@ describe('Demo salon and account (HTTP)', () => {
     });
   });
 
+  describe('squatting and leftovers', () => {
+    it('does not let anyone register the demo owner address', async () => {
+      const owner = await ctx.signUp();
+      await ctx
+        .http()
+        .post('/auth/signup')
+        .send({
+          email: 'Demo@SlotWise.dev',
+          password: PASSWORD,
+          businessName: 'Squatter',
+          timeZone: 'Asia/Ho_Chi_Minh',
+        })
+        .expect(400);
+      await ctx
+        .http()
+        .post('/staff')
+        .set(as(owner.cookie))
+        .send({ name: 'Squat', email: 'demo@slotwise.dev', password: PASSWORD })
+        .expect(400);
+      await ctx
+        .http()
+        .patch('/account/email')
+        .set(as(owner.cookie))
+        .send({ email: 'demo@slotwise.dev', password: PASSWORD })
+        .expect(400);
+    });
+
+    it('lets the demo owner add staff without a login, but not create a login', async () => {
+      const { cookie } = await demoLogin();
+      await ctx
+        .http()
+        .post('/staff')
+        .set(as(cookie))
+        .send({ name: 'Visitor staff' })
+        .expect(201);
+      await ctx
+        .http()
+        .post('/staff')
+        .set(as(cookie))
+        .send({
+          name: 'Visitor login',
+          email: 'visitor@example.com',
+          password: PASSWORD,
+        })
+        .expect(403);
+    });
+
+    it('removes any other login of the demo business when it resets', async () => {
+      const { cookie } = await demoLogin();
+      const [business] = await ctx.database.db
+        .select()
+        .from(businesses)
+        .where(eq(businesses.slug, 'luna-hair-studio'));
+      await ctx.database.db.insert(users).values({
+        email: `leftover-${Date.now()}@example.com`,
+        passwordHash: await ctx.hash(PASSWORD),
+        role: 'staff',
+        businessId: business!.id,
+      });
+      await ctx
+        .http()
+        .post('/demo/reset')
+        .set('x-reset-secret', SECRET)
+        .expect(200);
+
+      const rows = await ctx.database.db
+        .select()
+        .from(users)
+        .where(eq(users.businessId, business!.id));
+      expect(rows.map((row) => row.isDemo)).toEqual([true]);
+      await ctx.http().get('/auth/me').set(as(cookie)).expect(200); // the demo owner's session survives
+    });
+  });
+
   describe('a normal account', () => {
     it('changes its password with the current one, signs other devices out and keeps this one', async () => {
       const owner = await ctx.signUp();
