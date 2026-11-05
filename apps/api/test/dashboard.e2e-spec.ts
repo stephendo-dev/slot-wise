@@ -124,7 +124,14 @@ describe('Bookings dashboard and staff view (HTTP)', () => {
     it('defaults to today, and refuses a date that is not a date', async () => {
       const { owner } = await setup();
       await ctx.http().get('/bookings').set(as(owner.cookie)).expect(200);
-      for (const date of ['tomorrow', '2026-13-45', '2026-1-1']) {
+      for (const date of [
+        'tomorrow',
+        '2026-13-45',
+        '2026-1-1',
+        '2026-02-31',
+        '2026-04-31',
+        '2027-02-29',
+      ]) {
         await ctx
           .http()
           .get('/bookings')
