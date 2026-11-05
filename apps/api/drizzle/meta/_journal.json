@@ -22,6 +22,20 @@
       "when": 1793719446633,
       "tag": "0002_purple_frightful_four",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793720529094,
+      "tag": "0003_familiar_jigsaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793720529355,
+      "tag": "0004_bookings_no_overlap",
+      "breakpoints": true
     }
   ]
 }

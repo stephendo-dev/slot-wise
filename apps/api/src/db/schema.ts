@@ -14,6 +14,10 @@ import {
 import { ROLES } from '@slotwise/shared';
 
 export const userRole = pgEnum('user_role', ROLES);
+export const bookingStatus = pgEnum('booking_status', [
+  'confirmed',
+  'cancelled',
+]);
 
 export const businesses = pgTable('businesses', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -109,5 +113,40 @@ export const workingHours = pgTable(
       'working_hours_range',
       sql`${table.startMinute} < ${table.endMinute}`,
     ),
+  ],
+);
+
+// The database, not only the API, refuses two confirmed bookings of one staff
+// member that overlap: see the exclusion constraint in the migration
+// `bookings_no_overlap`, which drizzle-kit cannot express.
+export const bookings = pgTable(
+  'bookings',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    businessId: uuid('business_id')
+      .notNull()
+      .references(() => businesses.id, { onDelete: 'cascade' }),
+    staffId: uuid('staff_id')
+      .notNull()
+      .references(() => staff.id),
+    serviceId: uuid('service_id')
+      .notNull()
+      .references(() => services.id),
+    startAt: timestamp('start_at', { withTimezone: true }).notNull(),
+    endAt: timestamp('end_at', { withTimezone: true }).notNull(),
+    customerName: text('customer_name').notNull(),
+    customerEmail: text('customer_email').notNull(),
+    customerPhone: text('customer_phone').notNull(),
+    status: bookingStatus('status').notNull().default('confirmed'),
+    // Only the hash of the private link is kept.
+    manageTokenHash: text('manage_token_hash').notNull().unique(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index('bookings_staff_start_idx').on(table.staffId, table.startAt),
+    index('bookings_business_start_idx').on(table.businessId, table.startAt),
+    check('bookings_range', sql`${table.startAt} < ${table.endAt}`),
   ],
 );

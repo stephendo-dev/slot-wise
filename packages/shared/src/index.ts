@@ -21,3 +21,4 @@ export function slugify(name: string): string {
 
 export * from './auth.js';
 export * from './management.js';
+export * from './booking.js';
