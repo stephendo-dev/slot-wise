@@ -50,3 +50,21 @@ export interface BookingCreated {
   /** Shown once. Only its hash is stored. */
   manageToken: string;
 }
+
+export interface DayBooking {
+  id: string;
+  service: string;
+  start: string;
+  end: string;
+  status: 'confirmed' | 'cancelled';
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+}
+
+/** The bookings of one local day, grouped by staff member. */
+export interface DayBookings {
+  date: string;
+  timeZone: string;
+  groups: { staffId: string; staffName: string; bookings: DayBooking[] }[];
+}

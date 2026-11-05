@@ -164,3 +164,23 @@ export function localDay(ms: number, timeZone: string): string {
   const p = partsOf(ms, timeZone);
   return `${p.year}-${String(p.month).padStart(2, '0')}-${String(p.day).padStart(2, '0')}`;
 }
+
+/** The instants [start, end) of one local calendar day (y-m-d) in a zone. */
+export function dayRange(
+  date: string,
+  timeZone: string,
+): { start: number; end: number } {
+  const [year, month, day] = date.split('-').map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  const next = new Date(Date.UTC(year, month - 1, day + 1));
+  const at = (y: number, m: number, d: number) =>
+    // A zone whose clocks skip midnight starts its day at 01:00.
+    wallToUtc(y, m, d, 0, timeZone) ?? wallToUtc(y, m, d, 60, timeZone)!;
+  return {
+    start: at(year, month, day),
+    end: at(next.getUTCFullYear(), next.getUTCMonth() + 1, next.getUTCDate()),
+  };
+}
