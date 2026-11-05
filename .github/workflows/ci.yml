@@ -73,6 +73,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Browser test (booking page, test database)
+        run: pnpm test:e2e
+
       - name: Lighthouse (landing page, budget 95)
         run: pnpm lighthouse
 

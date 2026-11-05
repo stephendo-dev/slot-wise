@@ -51,6 +51,7 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm test:e2e     # Playwright books through the page (needs pnpm build, pnpm db:up, pnpm db:migrate:test and Chrome)
 pnpm lighthouse   # runs against the production build
 ```
 
