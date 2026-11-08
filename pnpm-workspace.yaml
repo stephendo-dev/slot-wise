@@ -11,22 +11,6 @@ allowBuilds:
   esbuild: false
   argon2: false
 
-# pnpm waits one day before installing a new release. next@16.4.4 (published 2026-11-02 10:40 UTC)
-# is exempt until that day has passed: delete this block after 2026-11-03 and run `pnpm install`.
-minimumReleaseAgeExclude:
-  - '@next/env@16.4.4'
-  - '@next/eslint-plugin-next@16.4.4'
-  - '@next/swc-darwin-arm64@16.4.4'
-  - '@next/swc-darwin-x64@16.4.4'
-  - '@next/swc-linux-arm64-gnu@16.4.4'
-  - '@next/swc-linux-arm64-musl@16.4.4'
-  - '@next/swc-linux-x64-gnu@16.4.4'
-  - '@next/swc-linux-x64-musl@16.4.4'
-  - '@next/swc-win32-arm64-msvc@16.4.4'
-  - '@next/swc-win32-x64-msvc@16.4.4'
-  - eslint-config-next@16.4.4
-  - next@16.4.4
-
 # Fixed versions for build-time dependencies of @lhci/cli and @nestjs/cli (see SECURITY.md).
 overrides:
   tmp: '>=0.2.6'
