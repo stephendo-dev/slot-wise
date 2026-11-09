@@ -23,7 +23,7 @@
     "db:migrate:test": "pnpm --filter api db:migrate:test"
   },
   "devDependencies": {
-    "@lhci/cli": "^0.15.1",
+    "@lhci/cli": "^0.16.0",
     "prettier": "^3.9.10"
   }
 }
