@@ -19,11 +19,11 @@
     "db:migrate:test": "DATABASE_URL_UNPOOLED= DATABASE_URL=${TEST_DATABASE_URL:-postgres://slotwise:slotwise@localhost:5432/slotwise_test} node src/db/migrate.ts"
   },
   "dependencies": {
-    "@nestjs/common": "^12.0.1",
-    "@nestjs/core": "^12.0.1",
-    "@nestjs/platform-express": "^12.0.1",
+    "@nestjs/common": "^12.4.0",
+    "@nestjs/core": "^12.4.0",
+    "@nestjs/platform-express": "^12.4.0",
     "@slotwise/shared": "workspace:*",
-    "argon2": "^0.45.1",
+    "argon2": "^0.45.2",
     "drizzle-orm": "^0.45.4",
     "pg": "^8.23.1",
     "reflect-metadata": "^0.2.2",
@@ -31,20 +31,20 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@nestjs/cli": "^12.0.0",
-    "@nestjs/schematics": "^12.0.0",
-    "@nestjs/testing": "^12.0.1",
+    "@nestjs/cli": "^12.0.12",
+    "@nestjs/schematics": "^12.0.13",
+    "@nestjs/testing": "^12.4.0",
     "@types/express": "^5.0.0",
     "@types/node": "^24.0.0",
     "@types/pg": "^8.23.1",
     "@types/supertest": "^7.0.0",
     "drizzle-kit": "^0.31.11",
-    "oxlint": "^1.58.0",
-    "oxlint-tsgolint": "^7.0.2001",
+    "oxlint": "^1.92.0",
+    "oxlint-tsgolint": "^7.0.2006",
     "prettier": "^3.4.2",
     "supertest": "^7.0.0",
     "typescript": "~6.0.3",
-    "vite": "^8.0.0",
+    "vite": "^8.3.6",
     "vitest": "^4.1.2"
   }
 }
